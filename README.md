@@ -1,4 +1,11 @@
 # Discord_Stock_Bot
+#ADD THE BOT TO YOUR SERVER
+https://discord.com/api/oauth2/authorize?client_id=1157763314751901796&permissions=96256&scope=bot 
+
+#JOIN THE STOCK BOT SERVER TO TEST IT OUT
+
+https://discord.gg/PafvzveS
+
 A discord bot that gets stock information
 
 
