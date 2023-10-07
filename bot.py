@@ -15,34 +15,31 @@ client = discord.Client(intents=intents)
 async def on_ready():
     print(f'Logged in as {client.user.name}')
 
+#This is all the event the bots will respond all are expanitory
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
     
-    if message.content.startswith("$active"):
+    if message.content.startswith("$active"): #display the most active stocks based on volume
         await message.channel.send(active())
 
-
-
-
-    if message.content.startswith('$losers'):
+    if message.content.startswith('$losers'): #display the stocks with the largest negative price change
         await message.channel.send(losers())
                                   
-                                  
-    
-    if message.content.startswith('$gainers'):
+    if message.content.startswith('$gainers'): #display the stocks with the largest positive price change
         await message.channel.send(gainers())
 
-    if message.content.startswith('$info'):
+    if message.content.startswith('$info'): # display basic stock info(content cut down to reduce the size of the message).Example would be $info goog will display basic info on Google
         ticker = message.content.split(' ')[1]
         await message.channel.send(info(ticker))
 
 
-    if message.content.startswith('$stock'):
+    if message.content.startswith('$stock'): # displays the closing end of day price for a stock. Examp would be $stock goog will display the closing price of Google.
         ticker = message.content.split(' ')[1]
         price = get_stock_price(ticker)
         await message.channel.send(f'price of {ticker} is {price}')
+#Functions. Eventually will be moved to a seperate file called functions so the code looks cleaner
 
 def get_stock_price(ticker):
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=5min&apikey={alpha_vantage_api_key}'
@@ -105,10 +102,18 @@ def info(ticker):
     message = ""
 
     for items in data:
-        info = items +' : ' + data[items] +"\n"
-        message += info
-
-    return message
+        if len(data[items]) < 100: #there is a limit to how long a message could be and anything message over 2000 charectors long will not be send and give you an error.
+            info = items +' : ' + data[items] +"\n"
+            message += info
+        else:
+             info = items +' : ' + data[items][:100] +"\n"
+            message += info
+    if message != "":
+        return message
+    else:
+        return f'Can not get info for ticker {ticker}'
+        
+        
     
 
 
